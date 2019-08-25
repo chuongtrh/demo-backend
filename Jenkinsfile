@@ -1,12 +1,20 @@
 pipeline {
-  agent {
-    docker { image 'node:10-alpine' }
-  }
+  agent any
   stages {
-      stage('Test') {
-          steps {
-              sh 'node --version'
-          }
-      }
+    stage('Build') {
+        steps {
+          echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
+        }
+    }
+    stage('Test') {
+        steps {
+            echo 'Testing..'
+        }
+    }
+    stage('Deploy') {
+        steps {
+            echo 'Deploying....'
+        }
+    }
   }
 }
