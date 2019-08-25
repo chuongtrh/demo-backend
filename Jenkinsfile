@@ -10,8 +10,6 @@ pipeline {
       steps {
         sh 'npm -v'
         sh 'node -v'
-        sh 'npm install'
-        sh '.script/test.sh'
       }
     }
   }
