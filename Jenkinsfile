@@ -5,7 +5,9 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh 'node --version'
+                sh 'node -v'
+                sh 'npm -v'
+                sh 'docker -v'
             }
         }
     }
