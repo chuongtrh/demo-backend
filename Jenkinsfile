@@ -6,8 +6,8 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'node -v'
-                sh 'npm -v'
-                sh 'docker -v'
+                sh 'npm install'
+                sh './script/test.sh'
             }
         }
     }
