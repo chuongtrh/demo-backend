@@ -1,16 +1,19 @@
 pipeline {
-    agent {
-        docker { 
-          image 'node:10-alpine' 
-          args '-u root -p 8081:8081 -v /var/run/docker.sock:/var/run/docker.sock'
+  // "Top-level" agent is assigned to docker slaves via Jenkins pipeline configuration
+  agent none
+
+  stages {
+    stage('Docker node test') {
+      agent {
+        docker {
+          image 'node:10-Alpine'
+          args '--name docker-node' // list any args
         }
+      }
+      steps {
+        sh 'node -v'
+      }
     }
-    stages {
-        stage('Test') {
-            steps {
-                sh 'docker -v'
-                sh 'node -v'
-            }
-        }
-    }
+
+  }
 }
