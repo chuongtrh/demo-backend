@@ -1,9 +1,10 @@
-var request = require('supertest');
-var app = require('../app');
+const supertest = require('supertest')
+const app = require('../app');
+const request = supertest(app)
 
 describe('GET /', function () {
     it('respond with hello world', function (done) {
         //navigate to root and check the the response is "hello world"
-        request(app).get('/').expect('hello world', done);
+        request.get('/').expect('hello world', done);
     });
 });
