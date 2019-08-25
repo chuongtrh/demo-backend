@@ -7,7 +7,7 @@ pipeline {
             steps {
                 sh 'node -v'
                 sh 'npm -v'
-                sh 'docker -v'
+                sh 'sudo docker -v'
             }
         }
     }
