@@ -10,6 +10,7 @@ pipeline {
             steps {
                 sh 'node -v'
                 sh 'npm install'
+                sh 'docker -v'
             }
         }
         stage('Unit Test') {
