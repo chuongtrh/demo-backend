@@ -10,6 +10,13 @@ pipeline {
             steps {
                 sh 'node -v'
                 sh 'npm install'
+
+                container('docker') {
+                  sh 'docker -v'
+                  // sh("docker login -u $DOCKER_USR -p $DOCKER_PSW")
+                  // sh("docker build -t $DOCKER_USR/${projectName} .")
+                  // sh("docker push $DOCKER_USR/${projectName}")
+                }
             }
         }
         stage('Unit Test') {
@@ -18,6 +25,7 @@ pipeline {
                 junit 'build/reports/**/*.xml'
             }
         }
+
         stage('Deploy - Staging') {
             steps {
                 echo 'Deploy - Staging Ok'
