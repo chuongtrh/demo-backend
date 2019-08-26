@@ -8,12 +8,15 @@ pipeline {
                 sh 'node -v'
                 sh 'npm install'
                 sh './script/unitTest.sh'
+                junit 'build/reports/**/*.xml'
+
             }
         }
         stage('Deploy - Staging') {
             steps {
                 echo 'Deploy - Staging Ok'
                 sh './script/smokeTest.sh'
+                junit 'build/reports/**/*.xml'
             }
         }
 
