@@ -2,30 +2,38 @@ pipeline {
     agent {
         docker { image 'node:10-alpine' }
     }
+    environment {
+        CI = 'true'
+    }
     stages {
-        stage('Test') {
+        stage('Build') {
             steps {
                 sh 'node -v'
                 sh 'npm install'
+            }
+        }
+        stage('Unit Test') {
+            steps {
                 sh './script/unitTest.sh'
                 junit 'build/reports/**/*.xml'
-
             }
         }
         stage('Deploy - Staging') {
             steps {
                 echo 'Deploy - Staging Ok'
+            }
+        }
+        stage('Smoke Test') {
+            steps {
                 sh './script/smokeTest.sh'
                 junit 'build/reports/**/*.xml'
             }
         }
-
         stage('Sanity check') {
             steps {
-                input "Does the staging environment look ok?"
+                input "Do you want to deploy on Production?"
             }
         }
-
         stage('Deploy - Production') {
             steps {
                 echo 'Deploy - Production Ok'
