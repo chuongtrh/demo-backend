@@ -7,12 +7,13 @@ pipeline {
             steps {
                 sh 'node -v'
                 sh 'npm install'
-                sh './script/test.sh'
+                sh './script/unitTest.sh'
             }
         }
         stage('Deploy - Staging') {
             steps {
                 echo 'Deploy - Staging Ok'
+                sh './script/smokeTest.sh'
             }
         }
 
