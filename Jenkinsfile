@@ -3,7 +3,9 @@ pipeline {
         docker { image 'node:10-alpine' }
     }
     environment {
-        CI = 'true'
+      registry = "demo-ci-cd/backend"
+      registryCredential = 'aws-dev-ops'
+      dockerImage = ''
     }
     stages {
         stage('Build') {
@@ -26,15 +28,14 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
-            steps {
-                docker.withRegistry('311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', 'aws-dev-ops') {
-                  def customImage = docker.build("demo-backend:${env.BUILD_ID}")
-                  customImage.push()
-                }
+        stage('Build image') {
+            steps{
+              script {
+                dockerImage = docker.build registry + ":$BUILD_NUMBER"
+              }
             }
         }
-
+  
         stage('Sanity check') {
             steps {
                 input "Do you want to deploy on Production?"
