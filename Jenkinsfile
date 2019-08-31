@@ -1,7 +1,6 @@
 pipeline {
   environment {
-    registry = "demo-ci-cd/backend"
-    registryCredential = 'aws-dev-ops'
+    IMAGE_NAME = "demo-ci-cd/backend"
     dockerImage = ''
   }
   agent any
@@ -39,17 +38,27 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build IMAGE_NAME + ":$BUILD_NUMBER"
         }
       }
     }
-    stage('Deploy Image') {
+    stage('Push Image') {
       steps{
         script {
           docker.withRegistry( 'https://311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', 'ecr:ap-southeast-1:aws-dev-ops' ) {
             dockerImage.push()
           }
         }
+      }
+    }
+    stage('Sanity check') {
+      steps {
+          input "Do you want to deploy on Production?"
+      }
+    }
+    stage('Deploy - Production') {
+      steps {
+          echo 'Deploy - Production Ok'
       }
     }
   }
