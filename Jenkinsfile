@@ -46,7 +46,6 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
-            sh("eval \$(aws ecr get-login --no-include-email | sed 's|https://||')")
             docker.withRegistry( '311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', 'ecr:ap-southeast-1:aws-dev-ops' ) {
               dockerImage.push()
             }
