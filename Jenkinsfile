@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    tools {nodejs "node"}
     environment {
       registry = "demo-ci-cd/backend"
       registryCredential = 'aws-dev-ops'
