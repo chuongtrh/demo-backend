@@ -8,9 +8,11 @@ pipeline {
     tools {nodejs "node"}
     stages {
         stage('Install package') {
-           steps {
-                sh 'npm config ls'
+          steps {
+            nodejs('node') {
+              sh 'npm config ls'
             }
+          }
         }
         stage('Unit Test') {
             steps {
