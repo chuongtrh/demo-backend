@@ -5,12 +5,13 @@ pipeline {
       dockerImage = ''
     }
     agent any
-    tools {nodejs "node"}
+    // tools {nodejs "node"}
     stages {
         stage('Install package') {
-            steps {
-                sh 'npm config ls'
-                sh 'npm install'
+           steps {
+                nodejs(nodeJSInstallationName: 'Node 10.16.x') {
+                    sh 'npm config ls'
+                }
             }
         }
         stage('Unit Test') {
