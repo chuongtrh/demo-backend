@@ -46,12 +46,11 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
-            // withDockerRegistry(credentialsId: 'ecr:ap-southeast-1:aws-dev-ops', url: '311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend') {
-            //     // some block
-            // }
-            docker.withRegistry( '311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', registryCredential ) {
+            withDockerRegistry(credentialsId: 'ecr:ap-southeast-1:aws-dev-ops', url: '311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend') {
               dockerImage.push()
             }
+            // docker.withRegistry( '311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', registryCredential ) {
+            // }
         }
       }
     }
