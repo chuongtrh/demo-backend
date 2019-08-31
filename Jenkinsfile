@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'node:10-alpine' }
+      label 'docker' 
     }
     environment {
       registry = "demo-ci-cd/backend"
@@ -8,26 +8,7 @@ pipeline {
       dockerImage = ''
     }
     stages {
-        stage('Build') {
-            steps {
-                sh 'node -v'
-                sh 'npm install'
-            }
-        }
-        stage('Unit Test') {
-            steps {
-                sh './script/unitTest.sh'
-                junit 'build/reports/**/*.xml'
-            }
-        }
-
-        stage('Smoke Test') {
-            steps {
-                sh './script/smokeTest.sh'
-                junit 'build/reports/**/*.xml'
-            }
-        }
-
+       
         stage('Build image') {
             steps{
               script {
@@ -35,17 +16,7 @@ pipeline {
               }
             }
         }
-  
-        stage('Sanity check') {
-            steps {
-                input "Do you want to deploy on Production?"
-            }
-        }
-        stage('Deploy - Production') {
-            steps {
-                echo 'Deploy - Production Ok'
-            }
-        }
+
     }
     post {
         success {
