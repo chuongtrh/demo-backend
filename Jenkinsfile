@@ -1,6 +1,6 @@
 pipeline {
     agent {
-      label 'docker' 
+      label 'dockerserver' 
     }
     environment {
       registry = "demo-ci-cd/backend"
