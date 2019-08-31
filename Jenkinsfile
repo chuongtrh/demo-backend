@@ -7,7 +7,18 @@ pipeline {
       dockerImage = ''
     }
     stages {
-       
+        stage('Build') {
+            steps {
+                sh 'node -v'
+                sh 'npm install'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                sh './script/unitTest.sh'
+                junit 'build/reports/**/*.xml'
+            }
+        }
         stage('Build image') {
             steps{
               script {
