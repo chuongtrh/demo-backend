@@ -1,7 +1,6 @@
 pipeline {
-    agent {
-      label 'dockerserver' 
-    }
+    agent any
+
     environment {
       registry = "demo-ci-cd/backend"
       registryCredential = 'aws-dev-ops'
