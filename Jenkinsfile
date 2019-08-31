@@ -46,9 +46,9 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
-            docker.withRegistry( '311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', 'ecr:ap-southeast-1:aws-dev-ops' ) {
-              dockerImage.push()
-            }
+          docker.withRegistry( 'https://311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', 'ecr:ap-southeast-1:aws-dev-ops' ) {
+            dockerImage.push()
+          }
         }
       }
     }
