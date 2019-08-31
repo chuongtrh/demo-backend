@@ -8,17 +8,21 @@ pipeline {
     tools {nodejs "node"}
     stages {
         stage('Install package') {
+          agent {
+            docker { image 'node:10-alpine' }
+          }
           steps {
-            nodejs('node') {
-              sh 'npm config ls'
-            }
+            sh 'npm config ls'
           }
         }
         stage('Unit Test') {
-            steps {
-                sh './script/unitTest.sh'
-                junit 'build/reports/**/*.xml'
-            }
+          agent {
+            docker { image 'node:10-alpine' }
+          }
+          steps {
+              sh './script/unitTest.sh'
+              junit 'build/reports/**/*.xml'
+          }
         }
         stage('Build image') {
             steps{
