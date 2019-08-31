@@ -10,7 +10,6 @@ pipeline {
             steps {
                 sh 'node -v'
                 sh 'npm install'
-                sh 'docker -v'
             }
         }
         stage('Unit Test') {
@@ -20,17 +19,22 @@ pipeline {
             }
         }
 
-        stage('Deploy - Staging') {
-            steps {
-                echo 'Deploy - Staging Ok'
-            }
-        }
         stage('Smoke Test') {
             steps {
                 sh './script/smokeTest.sh'
                 junit 'build/reports/**/*.xml'
             }
         }
+
+        stage('Build Image') {
+            steps {
+                docker.withRegistry('311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend', 'aws-dev-ops') {
+                  def customImage = docker.build("demo-backend:${env.BUILD_ID}")
+                  customImage.push()
+                }
+            }
+        }
+
         stage('Sanity check') {
             steps {
                 input "Do you want to deploy on Production?"
