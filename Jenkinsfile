@@ -1,15 +1,15 @@
 pipeline {
-    agent any
-    tools {nodejs "node"}
     environment {
       registry = "demo-ci-cd/backend"
       registryCredential = 'aws-dev-ops'
       dockerImage = ''
     }
+    agent any
+    tools {nodejs "node"}
     stages {
-        stage('Build') {
+        stage('Install package') {
             steps {
-                sh 'node -v'
+                sh 'npm config ls'
                 sh 'npm install'
             }
         }
