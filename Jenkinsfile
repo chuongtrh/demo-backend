@@ -5,14 +5,14 @@ pipeline {
       dockerImage = ''
     }
     agent any
-    tools {nodejs "node"}
     stages {
         stage('Install package') {
           agent {
-            docker { image 'node:10-alpine' }
+              docker { image 'node:10-alpine' }
           }
           steps {
-            sh 'npm config ls'
+              sh 'npm config ls'
+              sh 'npm install'
           }
         }
         stage('Unit Test') {
@@ -25,11 +25,11 @@ pipeline {
           }
         }
         stage('Build image') {
-            steps{
-              script {
-                dockerImage = docker.build registry + ":$BUILD_NUMBER"
-              }
+          steps{
+            script {
+              dockerImage = docker.build registry + ":$BUILD_NUMBER"
             }
+          }
         }
 
     }
