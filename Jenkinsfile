@@ -56,6 +56,9 @@ pipeline {
     }
     
     stage('Deploy') {
+      agent {
+        docker { image 'mesosphere/aws-cli' }
+      }
       steps {
         sh 'zip -r deployment-${BUILD_NUMBER}.zip . -x "*test*" "*build*" "*node_modules*"'
         sh 'aws s3 cp deployment-${BUILD_NUMBER}.zip s3://demo-backend-elasticbeanstalk-deployment --region ap-southeast-1'
