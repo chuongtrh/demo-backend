@@ -10,8 +10,8 @@ pipeline {
         docker { image 'node:10-alpine' }
       }
       steps {
-        sh 'sudo apt-get update'
-        sh 'sudo apt-get install -y awscli'
+        sh 'apt-get update'
+        sh 'apt-get install -y awscli'
         sh 'aws --version'
         sh 'npm config ls'
         sh 'npm install'
@@ -63,7 +63,7 @@ pipeline {
         sh 'aws elasticbeanstalk update-environment --application-name demo-backend --environment-name demo-backend-dev --version-label ${BUILD_NUMBER} --region ap-southeast-1'
       }
     }
-    
+
     stage('Sanity check') {
       steps {
           input "Do you want to deploy on Production?"
