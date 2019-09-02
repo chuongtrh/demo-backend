@@ -1,8 +1,8 @@
 {
     "AWSEBDockerrunVersion": "1",
     "Image": {
-      "Name": "demo-ci-cd/backend",
-      "Update": "true"
+        "Name": "311429916512.dkr.ecr.ap-southeast-1.amazonaws.com/demo-ci-cd/backend:latest",
+        "Update": "true"
     },
     "Ports": [
       {
