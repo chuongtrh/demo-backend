@@ -10,6 +10,9 @@ pipeline {
         docker { image 'node:10-alpine' }
       }
       steps {
+        sh 'sudo apt-get update'
+        sh 'sudo apt-get install -y awscli'
+        sh 'aws --version'
         sh 'npm config ls'
         sh 'npm install'
         stash includes: 'node_modules/', name: 'node_modules'
@@ -51,6 +54,16 @@ pipeline {
         }
       }
     }
+    
+    stage('Deploy') {
+      steps {
+        sh 'zip -r deployment-${BUILD_NUMBER}.zip . -x "*test*" "*build*" "*node_modules*"'
+        sh 'aws s3 cp deployment-${BUILD_NUMBER}.zip s3://demo-backend-elasticbeanstalk-deployment --region ap-southeast-1'
+        sh 'aws elasticbeanstalk create-application-version --application-name demo-backend --version-label ${BUILD_NUMBER} --source-bundle S3Bucket="demo-backend-elasticbeanstalk-deployment",S3Key="deployment-${BUILD_NUMBER}.zip" --region ap-southeast-1'
+        sh 'aws elasticbeanstalk update-environment --application-name demo-backend --environment-name demo-backend-dev --version-label ${BUILD_NUMBER} --region ap-southeast-1'
+      }
+    }
+    
     stage('Sanity check') {
       steps {
           input "Do you want to deploy on Production?"
