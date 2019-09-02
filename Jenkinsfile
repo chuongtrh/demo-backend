@@ -10,7 +10,7 @@ pipeline {
         docker { image 'node:10-alpine' }
       }
       steps {
-        sh "sed -i='' "s/<BUILD_NUMBER>/$BUILD_NUMBER/" Dockerrun.aws.json"
+        sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
         sh 'npm config ls'
         sh 'npm install'
         stash includes: 'node_modules/', name: 'node_modules'
