@@ -10,7 +10,6 @@ pipeline {
         docker { image 'node:10-alpine' }
       }
       steps {
-        sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
         sh 'npm config ls'
         sh 'npm install'
         stash includes: 'node_modules/', name: 'node_modules'
@@ -55,6 +54,7 @@ pipeline {
     
     stage('Deploy') {
       steps {
+        sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
         step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: true, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: '', keyPrefix: '', maxAttempts: 30, rootObject: '', sleepTime: 90, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: true])
       }
     }
