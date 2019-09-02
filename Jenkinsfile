@@ -10,9 +10,6 @@ pipeline {
         docker { image 'node:10-alpine' }
       }
       steps {
-        sh 'apt-get update'
-        sh 'apt-get install -y awscli'
-        sh 'aws --version'
         sh 'npm config ls'
         sh 'npm install'
         stash includes: 'node_modules/', name: 'node_modules'
