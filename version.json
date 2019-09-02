@@ -1,0 +1,7 @@
+{
+    "BuildNumber": "<BUILD_NUMBER>",
+    "BuildID": "<BUILD_ID>",
+    "CommitID": "<GIT_COMMIT>",
+    "Branch": "<GIT_BRANCH>",
+    "BuildTag": "<BUILD_TAG>"
+}

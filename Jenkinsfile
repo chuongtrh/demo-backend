@@ -37,6 +37,11 @@ pipeline {
     }
     stage('Build image') {
       steps{
+        sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' version.json"
+        sh "sed -i='' 's/<BUILD_ID>/${BUILD_ID}/' version.json"
+        sh "sed -i='' 's/<GIT_COMMIT>/${GIT_COMMIT}/' version.json"
+        sh "sed -i='' 's/<GIT_BRANCH>/${GIT_BRANCH}/' version.json"
+        sh "sed -i='' 's/<BUILD_TAG>/${BUILD_TAG}/' version.json"
         script {
           dockerImage = docker.build IMAGE_NAME + ":$BUILD_NUMBER"
         }
@@ -55,7 +60,7 @@ pipeline {
     stage('Deploy') {
       steps {
         sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
-        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 30, rootObject: '', sleepTime: 90, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: false])
+        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: true, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: true])
       }
     }
 
