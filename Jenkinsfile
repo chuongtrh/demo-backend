@@ -54,6 +54,7 @@ pipeline {
     
     stage('Deploy') {
       steps {
+        sh 'sed -i='' "s/<BUILD_NUMBER>/$BUILD_NUMBER/" Dockerrun.aws.json'
         step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: true, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: '', keyPrefix: '', maxAttempts: 30, rootObject: '', sleepTime: 90, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: true])
       }
     }
