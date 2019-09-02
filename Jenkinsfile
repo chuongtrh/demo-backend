@@ -53,16 +53,8 @@ pipeline {
     }
     
     stage('Deploy') {
-      agent {
-        docker { image 'mesosphere/aws-cli' }
-      }
       steps {
-        sh 'aws --version'
-        zip zipFile: "deployment-${BUILD_NUMBER}.zip", glob: "build/**, node_modules/**, tests/**"
-        // sh 'zip -r deployment-${BUILD_NUMBER}.zip . -x "*test*" "*build*" "*node_modules*"'
-        sh 'aws s3 cp deployment-${BUILD_NUMBER}.zip s3://demo-backend-elasticbeanstalk-deployment --region ap-southeast-1'
-        sh 'aws elasticbeanstalk create-application-version --application-name demo-backend --version-label ${BUILD_NUMBER} --source-bundle S3Bucket="demo-backend-elasticbeanstalk-deployment",S3Key="deployment-${BUILD_NUMBER}.zip" --region ap-southeast-1'
-        sh 'aws elasticbeanstalk update-environment --application-name demo-backend --environment-name demo-backend-dev --version-label ${BUILD_NUMBER} --region ap-southeast-1'
+        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: true, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: '', keyPrefix: '', maxAttempts: 30, rootObject: '', sleepTime: 90, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: true])
       }
     }
 
