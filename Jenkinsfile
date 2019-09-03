@@ -59,7 +59,7 @@ pipeline {
     stage('Deploy DEV') {
       steps {
         sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
-        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: false])
+        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: 'dev-${BUILD_NUMBER}', zeroDowntime: false])
       }
     }
     stage('Sanity check') {
@@ -70,7 +70,7 @@ pipeline {
     stage('Deploy STAGING') {
       steps {
         sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
-        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-staging', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: false])
+        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-staging', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: 'staging-${BUILD_NUMBER}', zeroDowntime: false])
       }
     }
   }
