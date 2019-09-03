@@ -56,37 +56,36 @@ pipeline {
         }
       }
     }
-    
-    stage('Deploy') {
+    stage('Deploy DEV') {
       steps {
         sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
         step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-dev', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: false])
       }
     }
-
     stage('Sanity check') {
       steps {
-          input "Do you want to deploy on Production?"
+        input "Do you want to deploy on STAGING?"
       }
     }
-    stage('Deploy - Production') {
+    stage('Deploy STAGING') {
       steps {
-          echo 'Deploy - Production Ok'
+        sh "sed -i='' 's/<BUILD_NUMBER>/${BUILD_NUMBER}/' Dockerrun.aws.json"
+        step([$class: 'AWSEBDeploymentBuilder', applicationName: 'demo-backend', awsRegion: 'ap-southeast-1', bucketName: 'demo-backend-elasticbeanstalk-deployment', checkHealth: false, credentialId: 'aws-dev-ops', environmentName: 'demo-backend-staging', excludes: '"build/**, node_modules/**, tests/**"', includes: 'Dockerrun.aws.json', keyPrefix: '', maxAttempts: 10, rootObject: '', sleepTime: 15, versionDescriptionFormat: '', versionLabelFormat: '${BUILD_NUMBER}', zeroDowntime: false])
       }
     }
   }
   post {
     success {
-        echo 'I succeeeded!'
+      echo 'I succeeeded!'
     }
     unstable {
-        echo 'I am unstable :/'
+      echo 'I am unstable :/'
     }
     failure {
-        echo 'I failed :('
+      echo 'I failed :('
     }
     changed {
-        echo 'Things were different before...'
+      echo 'Things were different before...'
     }
   }
 }
